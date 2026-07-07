@@ -5,6 +5,61 @@ Python CLI app to assign support/work cases from CSV input across SEs as evenly 
 ## Requirements
 
 - Python 3.9+
+- No external Python packages are required
+
+## Setup
+
+Clone the repository and move into it:
+
+```bash
+cd /home/runner/work/AssignCase/AssignCase
+```
+
+Optional: create and activate a virtual environment.
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+```
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+## Sample input files
+
+Ready-to-use sample CSV files are included in `/home/runner/work/AssignCase/AssignCase/samples`:
+
+- `/home/runner/work/AssignCase/AssignCase/samples/cases.csv`
+- `/home/runner/work/AssignCase/AssignCase/samples/se.csv`
+
+## How to run the project
+
+Run the main script from the repository root:
+
+```bash
+cd /home/runner/work/AssignCase/AssignCase
+python assign_cases.py \
+  --cases samples/cases.csv \
+  --se samples/se.csv \
+  --output samples/assigned.csv
+```
+
+For deterministic scoring, pass `--now`:
+
+```bash
+python assign_cases.py \
+  --cases samples/cases.csv \
+  --se samples/se.csv \
+  --output samples/assigned.csv \
+  --now 2026-07-07T00:00:00Z
+```
+
+The command writes a new CSV to the `--output` path with all original case columns plus:
+
+- `assigned_se`
 
 ## Input CSV format
 
@@ -19,8 +74,8 @@ Optional column:
 
 - `first response time`
 
-If `first response time` column exists but a row value is blank, it is treated as `now - created time`.
-If `first response time` column is absent, first-response scoring is not used.
+If `first response time` exists but a row value is blank, it is treated as `now - created time`.
+If `first response time` is absent, first-response scoring is not used.
 
 Example:
 
@@ -33,7 +88,7 @@ C-003,2026-07-03T15:10:00,2026-07-03T16:00:00
 
 ### SE CSV
 
-Provide one SE name per row (first column is used):
+Provide one SE name per row. The first column is used, and a header row such as `name` is allowed:
 
 ```csv
 name
@@ -42,21 +97,18 @@ Bob
 Charlie
 ```
 
-## Usage
+## How to test the project
+
+Run the existing unit tests from the repository root:
 
 ```bash
-python /home/runner/work/AssignCase/AssignCase/assign_cases.py \
-  --cases /absolute/path/cases.csv \
-  --se /absolute/path/se.csv \
-  --output /absolute/path/assigned.csv
+cd /home/runner/work/AssignCase/AssignCase
+python -m unittest -v
 ```
 
-Optional:
+Current tests cover:
 
-- `--now` ISO timestamp override for deterministic runs/tests.
-
-## Output
-
-Writes a CSV to `--output` with original case columns plus:
-
-- `assigned_se`
+- balanced assignment counts
+- output CSV generation
+- missing first-response handling
+- invalid input validation
