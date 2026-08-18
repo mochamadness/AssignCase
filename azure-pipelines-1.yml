@@ -2,9 +2,8 @@ resources:
   repositories:
   - repository: other
     type: github
-    name: mochamadness/AssignCase        # note: name includes the owner
+    name: mochamadness/terraformTest
     endpoint: github.com_mochamadness
-
 
 trigger: none
 pool:
@@ -13,8 +12,7 @@ pool:
 steps:
 - checkout: self
 - checkout: other
-
 - bash: |
     echo "Build.SourcesDirectory = $(Build.SourcesDirectory)"
-    find $(Pipeline.Workspace) -maxdepth 4 -type d
+    find $(Pipeline.Workspace) -maxdepth 4 -type d -not -path "*/.git*"
   displayName: Show paths
