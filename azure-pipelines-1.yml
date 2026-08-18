@@ -2,8 +2,9 @@ resources:
   repositories:
   - repository: other
     type: github
-    name: myorg/other-repo        # note: name includes the owner
-    endpoint: MyGitHubServiceConnection
+    name: mochamadness/AssignCase        # note: name includes the owner
+    endpoint: github.com_mochamadness
+
 
 trigger: none
 pool:
