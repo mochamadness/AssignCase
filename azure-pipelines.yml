@@ -1,0 +1,14 @@
+trigger: none
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- checkout: self
+
+- bash: |
+    echo "Pipeline.Workspace   = $(Pipeline.Workspace)"
+    echo "Build.SourcesDirectory = $(Build.SourcesDirectory)"
+    echo "Build.Repository.LocalPath = $(Build.Repository.LocalPath)"
+    echo "--- tree ---"
+    find $(Pipeline.Workspace) -maxdepth 3 -type d
+  displayName: Show paths
